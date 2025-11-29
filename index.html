@@ -67,7 +67,7 @@ button:disabled { background: #ccc; cursor: not-allowed; }
 const API_URL = "https://script.google.com/macros/s/AKfycbwKIiLUuSJQSBZPfwVaA72JusIOLS6xXei3csLUIxiCIvMki7nP7ATmcGEcykt_OQsx/exec"; 
 
 // Link Web yang akan dibagikan
-const SHARE_LINK = "https://layanantanjungkerta-beep.github.io/iklan/";
+const SHARE_LINK = "https://donasi-dana.github.io/umat/";
 
 document.getElementById("adForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -98,7 +98,7 @@ document.getElementById("adForm").addEventListener("submit", async (e) => {
 
     if (result.status === "success") {
       // 2. Siapkan Pesan WhatsApp
-      const waMessage = `Halo, saya ${nama}. Saya baru saja pasang iklan "${judul}".\n\nYuk cek layanan dan iklan warga Desa Tanjungkerta lainnya disini:\n${SHARE_LINK}`;
+      const waMessage = `Halo, saya ${nama}. Saya baru saja Ikut Program Saling Bantu DANA "${judul}".\n\nYuk Gabung Dengan Kami, Kita Saling Bantu Gotong Royong Kita Bisa, cek Websitenya:\n${SHARE_LINK}`;
        
       const waUrl = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
 
@@ -178,4 +178,5 @@ loadAds();
 
 </body>
 </html>
+
 
