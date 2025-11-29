@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROGRAM BANTU MEMBANTU</title>
+
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; margin: 0; }
+h2, h3 { text-align: center; color: #333; }
+
+/* Form Styling */
+form { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto; }
+input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+input:focus { outline: none; border-color: #25d366; } /* Warna WA */
+
+/* Button Styling */
+button { width: 100%; padding: 12px; background: #25d366; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;}
+button:hover { background: #128c7e; }
+button:disabled { background: #ccc; cursor: not-allowed; }
+
+/* Ad Container Styling */
+#ad-container { max-width: 500px; margin: 0 auto; }
+.ad-box { background: white; padding: 15px; margin-bottom: 12px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); font-size: 15px; border-left: 5px solid #25d366; animation: fadeIn 0.5s; word-wrap: break-word; }
+.ad-box b { color: #333; font-size: 1.1em; display: block; margin-bottom: 5px; }
+.ad-box a { color: #007bff; text-decoration: none; word-break: break-all; display: inline-block; margin: 5px 0; }
+.ad-box .rek-text { display: block; background: #eee; padding: 5px; border-radius: 4px; font-weight: bold; color: #444; margin: 5px 0; }
+.loader { text-align: center; color: #666; font-style: italic; display: none; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<h2>OPEN DONASI DANA 5000</h2>
+<h3>Program Sosial Saling Membantu</h3>
+
+<form id="adForm">
+  <input type="text" id="nama" placeholder="Nama Anda" required>
+  <input type="text" id="judul" placeholder="Masukan harapan atau Doa (Contoh: Semoga Hutang Saya Lunas)" required>
+  
+  <input type="text" id="website" placeholder="Nama Rek Dana / Info Transfer" required>
+  
+  <input type="tel" id="hp" placeholder="Nomor HP DANA Anda" required>
+   
+  <button type="submit" id="submitBtn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+    </svg>
+    Kirim & Bagikan ke WA
+  </button>
+  <small style="display:block; text-align:center; margin-top:5px; color:#666;">
+    *Wajib bagikan ke 5 teman agar iklan aktif.
+  </small>
+</form>
+
+<h3>SILAHKAN SCRENSHOT DATA DI BAWAH - KEMUDIAN ISI DANA Mereka Masing Masing 1000 Rupiah</h3>
+<div id="loader" class="loader">Memuat data...</div>
+<div id="ad-container"></div>
+
+<script>
+// === GANTI DENGAN URL WEB APP SCRIPT ANDA DI SINI ===
+const API_URL = "https://script.google.com/macros/s/AKfycbwKIiLUuSJQSBZPfwVaA72JusIOLS6xXei3csLUIxiCIvMki7nP7ATmcGEcykt_OQsx/exec"; 
+
+// Link Web yang akan dibagikan
+const SHARE_LINK = "https://layanantanjungkerta-beep.github.io/iklan/";
+
+document.getElementById("adForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+   
+  const btn = document.getElementById("submitBtn");
+  const originalText = btn.innerHTML;
+  btn.innerText = "Menyimpan...";
+  btn.disabled = true;
+
+  const nama = document.getElementById("nama").value;
+  const judul = document.getElementById("judul").value;
+
+  const dataObj = {
+    nama: nama,
+    judul: judul,
+    website: document.getElementById("website").value,
+    hp: document.getElementById("hp").value
+  };
+
+  try {
+    // 1. Simpan ke Google Sheet
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify(dataObj)
+    });
+
+    const result = await res.json();
+
+    if (result.status === "success") {
+      // 2. Siapkan Pesan WhatsApp
+      const waMessage = `Halo, saya ${nama}. Saya baru saja pasang iklan "${judul}".\n\nYuk cek layanan dan iklan warga Desa Tanjungkerta lainnya disini:\n${SHARE_LINK}`;
+       
+      const waUrl = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
+
+      // 3. Tampilkan Notifikasi & Redirect ke WA
+      if(confirm("Data tersimpan! Langkah terakhir: Bagikan info ini ke teman-teman di WhatsApp agar iklan Anda tayang maksimal. Buka WhatsApp sekarang?")) {
+          window.open(waUrl, '_blank');
+      }
+
+      e.target.reset();
+      loadAds();
+       
+    } else {
+      alert("Gagal menyimpan: " + result.message);
+    }
+
+  } catch (err) {
+    alert("Terjadi kesalahan koneksi.");
+    console.error(err);
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+});
+
+// --- Fungsi Load Iklan ---
+let ads = [];
+
+async function loadAds() {
+  document.getElementById("loader").style.display = "block";
+  try {
+    const res = await fetch(API_URL);
+    ads = await res.json();
+    document.getElementById("loader").style.display = "none";
+    showRandomAds();
+  } catch (err) {
+    console.error("Gagal load ads:", err);
+    document.getElementById("loader").innerHTML = "Gagal memuat iklan.";
+  }
+}
+
+function showRandomAds() {
+  const container = document.getElementById("ad-container");
+  if (!ads || ads.length === 0) {
+    container.innerHTML = "<p style='text-align:center;color:gray;'>Belum ada iklan.</p>";
+    return;
+  }
+  const shuffled = [...ads].sort(() => Math.random() - 0.5);
+  const selected = shuffled.slice(0, 5);
+
+  container.innerHTML = "";
+  selected.forEach(ad => {
+    const box = document.createElement("div");
+    box.className = "ad-box";
+    
+    // LOGIKA BARU UNTUK TAMPILAN
+    // Jika input diawali http/https, jadikan Link. Jika tidak, jadikan Teks Rekening.
+    let displayInfo = "";
+    if (ad.website.toLowerCase().startsWith('http')) {
+        displayInfo = `<a href="${ad.website}" target="_blank">Klik Link Dana/Web &#8599;</a>`;
+    } else {
+        displayInfo = `<span class="rek-text">Rek/Info: ${ad.website}</span>`;
+    }
+
+    box.innerHTML = `
+      <b>${ad.judul}</b>
+      <small>Oleh: ${ad.nama}</small><br>
+      ${displayInfo}<br>
+      <small style="color:#28a745">CP: ${ad.hp}</small>
+    `;
+    container.appendChild(box);
+  });
+}
+
+setInterval(showRandomAds, 10000);
+loadAds();
+</script>
+
+</body>
+</html>
